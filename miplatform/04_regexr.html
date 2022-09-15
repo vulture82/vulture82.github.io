@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-Transitional.dtd" >
+<HTML>
+ <HEAD>
+  <TITLE> svc_conversion </TITLE>
+	<meta http-equiv= "content-type" content ="text/html charset=euc-kr" />
+	<META NAME="Generator" CONTENT="EditPlus">
+	<META NAME="Author" CONTENT="">
+	<META NAME="Keywords" CONTENT="">
+	<META NAME="Description" CONTENT="">
+
+<link rel="stylesheet" type="text/css" href="../ayjCss.css">
+<script type="text/javascript">
+function regexr_OnLoadCompleted()
+{
+	document.getElementById('txtOraIn').focus();
+}
+
+function keyevent()
+{
+	// ctrl + enter IN 절 만들기
+	if(event.ctrlKey && event.keyCode == 13 ){
+		btn1_onclick();
+	}
+}
+
+var root;
+
+/* in 절 만들기 */
+function btn1_onclick()
+{
+	document.getElementById('txtOraInCrea').value = "";
+
+	var tmp1 = document.getElementById('txtOraIn').value.trim();
+
+	var arrText 	= tmp1.split('\n');
+	var strEnd 		= "";
+
+	for (var i=0; i<arrText.length; i++)
+	{
+		arrText[i] = arrText[i].replaceAll(" ", "");
+
+		var strSub 		= "";
+
+		if ( i == 0 ){
+			strSub = "'" + arrText[i] + "'";
+		} else {
+			strSub = ",'" + arrText[i] + "'";
+		}
+		strEnd += strSub;
+	}
+
+	document.getElementById('txtOraInCrea').value = "(" + strEnd + ")";
+
+}
+
+/* Query 정리 하기 */
+function btn2_onclick()
+{
+	document.getElementById('txtQuerySortCrea').value = "";
+
+	var tmp1 = document.getElementById('txtQuerySort').value.trim();
+
+	var arrText 	= tmp1.split('\n');
+	var strFirst 	= "";
+	var strMiddle 	= "";
+	var strEnd 		= "";
+	var strCompl 	= "";
+
+	for (var i=0; i<arrText.length; i++)
+	{
+		// 마지막글짜가 , 이면 자르기
+		if (arrText[i].charAt(arrText[i].length-1) == "," ){
+			arrText[i] = arrText[i].slice(0, -1);
+		}
+
+		if (arrText[i].toUpperCase().indexOf("SELECT") > -1) {
+			strFirst += "\t\t" + arrText[i] + "\n";
+		} else if (arrText[i].toUpperCase().indexOf("FROM") > -1) {
+			strMiddle += "\t\t  " + arrText[i] + "\n";
+		} else if (arrText[i].toUpperCase().indexOf("WHERE") > -1) {
+			strMiddle += "\t\t " + arrText[i] + "\n";
+		} else if (arrText[i].toUpperCase().indexOf("AND") > -1) {
+			strMiddle += "\t\t   " + arrText[i] + "\n";
+		} else if (arrText[i].toUpperCase().indexOf("ORDER") > -1) {
+			strMiddle += "\t\t " + arrText[i] + "\n";
+		} else {
+			strMiddle += "\t\t\t , " + arrText[i] + "\n";
+		}
+		
+	}
+
+	strCompl = strFirst + strMiddle + strEnd;
+
+	strCompl = strCompl.toUpperCase();
+
+	document.getElementById('txtQuerySortCrea').value = strCompl;
+
+}
+
+</script>
+ </HEAD>
+
+ <BODY onload="regexr_OnLoadCompleted();">
+	<h1>정규식_V1</h1>
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>IN 절 만들기</th>
+				<th>Query 정리</th>
+				<th>미사용</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<textarea id="txtOraIn" wrap="off" onkeydown="javascript:keyevent(this);" style="width:98%; height:200px;"></textarea>
+				</td>
+
+				<td>
+					<textarea id="txtQuerySort" wrap="off" style="width:98%; height:200px;"></textarea>
+				</td>
+
+				<td>
+					<textarea id="txtTest2" wrap="off" style="width:98%; height:200px;" disabled></textarea>
+				</td>
+			</tr>
+			<tr style="text-align: center;">
+				<td>
+					<button type="button" onClick="btn1_onclick();">생성</button>
+				</td>
+
+				<td>
+					<button type="button" onClick="btn2_onclick();">생성</button>
+				</td>
+
+				<td>
+					<button type="button" onClick="btn3_onclick();">생성</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br />
+
+	<table class="blueTable">
+		<tbody>
+			<tr>
+				<td>
+					<textarea id="txtOraInCrea" wrap="off" style="width:98%; height:200px;"></textarea>
+				</td>
+
+				<td>
+					<textarea id="txtQuerySortCrea" wrap="off" style="width:98%; height:200px;"></textarea>
+				</td>
+
+				<td>
+					<textarea id="txtTest2Crea" wrap="off" style="width:98%; height:200px;" disabled></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>*사용법</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>1. in절 만들기에서 Ctrl + enter 는 생성 버튼 클릭</td>
+			</tr>
+			<tr>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+ </BODY>
+</HTML>

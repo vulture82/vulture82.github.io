@@ -1,0 +1,280 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-Transitional.dtd" >
+<HTML>
+ <HEAD>
+  <TITLE> svc_conversion </TITLE>
+	<meta http-equiv= "content-type" content ="text/html charset=euc-kr" />
+	<META NAME="Generator" CONTENT="EditPlus">
+	<META NAME="Author" CONTENT="">
+	<META NAME="Keywords" CONTENT="">
+	<META NAME="Description" CONTENT="">
+
+<link rel="stylesheet" type="text/css" href="../ayjCss.css">
+<script type="text/javascript">
+function autoGrid_OnLoadCompleted()
+{
+	//document.getElementById('txtColumnNm').value	= "학번\n성명";
+	document.getElementById('txtColumn').value		= "STD_NO\nKOR_NM";
+	document.getElementById('edMainDs').focus();
+
+}
+
+var root;
+function preBtn1_onclick()
+{
+
+	// MainDs Check
+	var strBindDataset = document.getElementById('edMainDs').value.trim();
+
+	if ( strBindDataset.length == 0 ) {
+		alert("[MainDs] 이름을 작성해 주시기 바랍니다...!");
+		document.getElementById('edMainDs').focus();
+		return false;
+	}
+
+	// DummyDs Check
+	var strGridId = document.getElementById('edDummyDs').value.trim();
+
+	if ( strGridId.length == 0 ) {
+		alert("[DummyDs] 이름을 작성해 주시기 바랍니다...!");
+		document.getElementById('edDummyDs').focus();
+		return false;
+	}
+
+	// DummyExcelDs Check
+	var strWidth = document.getElementById('edDummyExcelDs').value.trim();
+
+	if ( strWidth.length == 0 ) {
+		alert("[DummyExcelDs] 이름을 작성해 주시기 바랍니다...!");
+		document.getElementById('edDummyExcelDs').focus();
+		return false;
+	}
+
+	return true;
+}
+
+function btn1_onclick()
+{
+
+	if ( !preBtn1_onclick() ){
+		return;
+	}
+
+	// dataset id 까지 사용 할때
+	document.getElementById('txtComplete').value = ""; // 초기화
+
+	var tmp1 = document.getElementById('txtColumnNm').value.trim();
+	var tmp2 = document.getElementById('txtColumn').value.trim();
+
+	var arrColumnNm 	= tmp1.split('\n');
+	var arrColumn 		= tmp2.split('\n');
+
+	if ( tmp1.length > 0 ) {
+		if (arrColumnNm.length != arrColumn.length ) {
+			alert("[컬럼명(주석)] 과 [컬럼] 갯수가 다릅니다.");
+			document.getElementById('txtColumnNm').focus();
+			return;
+		}
+	}
+
+	var test_text1	= "";
+	var strComplete = "";
+
+	// MainDs 값
+	var strMainDs			= document.getElementById('edMainDs').value.trim();
+
+	// DummyDs 이름
+	var strDummyDs			= document.getElementById('edDummyDs').value.trim();
+
+	// DummyExcelDs 이름
+	var strDummyExcelDs		= document.getElementById('edDummyExcelDs').value.trim();
+
+	// GRID 생성시작
+	var strGridSouCe	 = '';
+
+	var strGrid0		 = "if( fdFileDialog.Open() )\n{\n";
+		strGrid0		+= "\t" + strMainDs + ".ClearData();\n";
+		strGrid0		+= "\t" + strDummyDs + ".ClearData();\n";
+		strGrid0		+= "\t" + strDummyExcelDs + ".ClearData();\n\n";
+		strGrid0		+= '\t' + 'var strFileUrl = fdFileDialog.FilePath + "\\\\" + fdFileDialog.FileName;\n'; // \\ < 이스케이프 역슬러쉬1개
+
+	var strGrid1		 = "\t" + "ext_ExcelImportByIndex(strFileUrl, 0,'" + strDummyExcelDs + "' ,1, 1, 0, 0);" + "\n\n";
+
+	var strGrid2		 = "\t" + strDummyExcelDs + ".DeleteRow(0);" + "\n\n";
+
+	var strGrid3		 = "\t" + "for( var i=0; i < " + strDummyExcelDs + ".RowCount(); i++ )" + "\n\t{\n";
+
+	var strGrid4		 = "\t\t" + "var nRow = " + strDummyDs + ".AddRow();" + "\n";
+
+	var strGrid5		 = '';
+	// 컬럼 명칭 소문자
+	var strLowColumn	 = '';
+
+	var strColNum		 = '';
+	var strInc			 = 1;
+
+	for ( var i=0; i<arrColumn.length; i++ ) {
+		strColNum			= "";
+		strLowColumn	= arrColumn[i].toLowerCase();
+		strColNum = ( strInc < 10 ) ? "0" + strInc : strInc;
+
+		if ( strLowColumn == "reg_dttm" || strLowColumn == "mod_dttm" ) {
+			continue;
+
+		} else if ( strLowColumn == "reg_id" || strLowColumn == "mod_id" ) {
+			strGrid5		+= '\t\t' + strDummyDs + '.SetColumn(nRow, "' + dashToCamel(strLowColumn) + '", \t\tG_USER_NO); // ' + arrColumnNm[i] + '\n';
+
+		} else if ( strLowColumn == "reg_ip" || strLowColumn == "mod_ip" ) {
+			strGrid5		+= '\t\t' + strDummyDs + '.SetColumn(nRow, "' + dashToCamel(strLowColumn) + '", \t\tG_IP_ADDR); // ' + arrColumnNm[i] + '\n';
+
+		} else {
+			strGrid5		+= '\t\t' + strDummyDs + '.SetColumn(nRow, "' + dashToCamel(strLowColumn) + '", \t\t' + strDummyExcelDs + '.GetColumn(i,"Col' + strColNum + '")); // ' + arrColumnNm[i] + '\n';
+			strInc++;
+		}
+
+	}
+
+	strGrid5 += "\t}\n\n";
+
+	var strGrid6		 = "\t" + strMainDs + ".Copy(" + strDummyDs + ");\n\n";
+
+	var strGrid7		 = "\t" + strMainDs + ".UpdateControl = false;\n";
+		strGrid7		+= "\t" + "for ( var i=0; i< " + strMainDs + ".GetRowCount(); i++ ) {\n";
+		strGrid7		+= "\t\t" + strMainDs + ".SetRowType(i, 'Insert');\n";
+		strGrid7		+= "\t}\n";
+		strGrid7		+= "\t" + strMainDs + ".UpdateControl = true;\n";
+
+	strGridSouCe = strGrid0 + strGrid1 + strGrid2 + strGrid3 + strGrid4 + strGrid5 + strGrid6 + strGrid7 + "}";
+
+	strComplete = strGridSouCe;
+
+	document.getElementById('txtComplete').value = strComplete;
+
+	document.getElementById('txtDummyDataSet').value = ""; // 초기화
+
+	// GRID 생성시작
+	var strDataSetsource	= '';
+	var strComplete2		= "";
+
+	var strDataSet1			= '<Dataset DataSetType="Dataset" Id="' + strDummyDs + '">' + '\n';
+	var strDataSet2			= '\t' + '<Contents>' + '\n';
+	var strDataSet3			= '';
+
+	// 컬럼
+	var strLowColumn2	= '';
+
+	for ( var i=0; i<arrColumn.length; i++ ) {
+		strLowColumn2	= arrColumn[i].toLowerCase();
+		strDataSet3		+= '\t\t' + '<colinfo id="' + dashToCamel(strLowColumn2) + '" size="256" summ="default" type="STRING"/>' + '\n';
+	}
+
+	var strDataSet4			= '\t' + '</Contents>\n';
+	var strDataSet5			= '</Dataset>';
+
+	strDataSetsource = strDataSet1 + strDataSet2 + strDataSet3 + strDataSet4 + strDataSet5;
+
+	strComplete2 = strDataSetsource;
+
+	document.getElementById('txtDummyDataSet').value = strComplete2;
+
+}
+
+function dashToCamel(str)
+{
+	return str.replace(/_+(.)/gi, function (x, chr) {
+		return chr.toUpperCase();
+		}
+	)
+}
+
+</script>
+ </HEAD>
+
+ <BODY onload="autoGrid_OnLoadCompleted();">
+	<h1>마이플랫폼 엑셀업로드 v1</h1>
+	<table class="blueTable">
+		<tbody>
+			<tr>
+				<td>그리드 DataSet</td>
+				<td><input type="text" id="edMainDs" name="edMainDs" size="20" value="DS_EXAM120" />
+				</td>
+
+				<td>더미 Dataset</td>
+				<td><input type="text" id="edDummyDs" name="edDummyDs" size="20" value="DS_DUMMY" />
+				</td>
+
+				<td>더미 Dataset2</td>
+				<td><input type="text" id="edDummyExcelDs" name="edDummyExcelDs" size="20" value="DS_DUMMY_EXCEL" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br />
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>컬럼명(주석)</th>
+				<th>컬럼</th>
+				<th>기타(추후개발)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<textarea id="txtColumnNm" wrap="off" style="width:98%; height:200px;"></textarea>
+				</td>
+
+				<td>
+					<textarea id="txtColumn" wrap="off" style="width:98%; height:200px;"></textarea>
+				</td>
+
+				<td>
+					<textarea id="txtEct" wrap="off" style="width:98%; height:200px;" disabled></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div>
+		<p style="float:right;"><button type="button" onClick="btn1_onclick();">생성</button></p>
+	</div>
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>완성된 ExcelUpload Script 소스</th>
+				<th>더미 Dataset 생성</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<textarea id="txtComplete" wrap="off" style="width:99%; height:200px;"></textarea>
+				</td>
+				<td>
+					<textarea id="txtDummyDataSet" wrap="off" style="width:99%; height:200px;"></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br />
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>*사용방법</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>1. 주석 쓸내용이 없으면 아무것도 안써도 된다.</td>
+			</tr>
+			<tr>
+				<td>2. 주석을 사용할려면 컬럼과 사이즈(갯수)를 맞춰야된다.</td>
+			</tr>
+		</tbody>
+	</table>
+ </BODY>
+</HTML>

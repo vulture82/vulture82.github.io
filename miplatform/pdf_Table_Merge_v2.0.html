@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-Transitional.dtd" >
+<HTML>
+ <HEAD>
+  <TITLE> 나이스_DB_Merge </TITLE>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8">
+	<META NAME="Generator" CONTENT="EditPlus">
+	<META NAME="Author" CONTENT="">
+	<META NAME="Keywords" CONTENT="">
+	<META NAME="Description" CONTENT="">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+var gbTableName		= ""; //테이블명
+var gbTableComment  = ""; //테이블_코멘트
+function btn1_onclick()
+{
+	var text = document.getElementById('txtExria1').value + "\n";
+		text = text.slice(0, -1);
+
+	var arrayOfLines 			= text.split('\n');
+	var strColumnName			= new Array(); // 컬럼명
+	var strSplitTable			= ""; // 테이블명_정규식(통과한부분 저장)
+	var strSplitTableComment	= ""; // 테이블_코멘트_정규식(통과한부분 저장)
+	var strSplitColumn			= ""; // 컬럼명_정규식(통과한부분 저장)
+	var strDataSetId			= ""; // 결과값
+	var strModify				= ""; // 결과값(comment)
+	var strCommnetFg			= ""; // commnet 찾아서 연결
+	var strCommnet				= ""; // 결과값(comment)
+	var pattern					= /([a-zA-Z])\w+/gi;
+	var pattern2				= /\(.*\)/gi;
+
+
+	for ( var i=0; i<arrayOfLines.length; i++ ) {
+		if ( i == 0 ) {
+			strSplitTable			= pattern.exec(arrayOfLines[i].trim());
+			gbTableName				= strSplitTable[0].toUpperCase();		// 테이블명_대문자
+
+			strSplitTableComment	= pattern2.exec(arrayOfLines[i].trim());
+			strSplitTableComment	= strSplitTableComment[0].slice(0, -1);
+			gbTableComment			= strSplitTableComment.substring(1);	// 테이블_코멘트
+
+		} else if ( i == 1 ) {
+			strDataSetId += "ALTER TABLE " + gbTableName + " ADD (" + "EXAM_YY" + " " + "VARCHAR2(4)" + ");\n";
+
+		} else {
+			strSplitColumn = arrayOfLines[i].split(" ");
+			if ( strSplitColumn[1].indexOf("TEXT") < 0 ) {
+				strDataSetId += "ALTER TABLE " + gbTableName + " ADD (" + strSplitColumn[0].toUpperCase() + " " + strSplitColumn[1] + ");\n";
+				strModify += "ALTER TABLE " + gbTableName + " MODIFY(" + strSplitColumn[0].toUpperCase() + " " + strSplitColumn[1] + ");\n";
+			} else {
+				strDataSetId += "ALTER TABLE " + gbTableName + " ADD (" + strSplitColumn[0].toUpperCase() + " " + "CLOB" + ");\n";
+				strModify += "ALTER TABLE " + gbTableName + " MODIFY(" + strSplitColumn[0].toUpperCase() + " " + "CLOB" + ");\n";
+			}
+
+			//Comment
+			strCommnetFg = "";
+
+			for ( var j=0; j<strSplitColumn.length; j++ ) {
+				if ( j == 0 || j == 1 ) continue; // 그냥 진행
+				if ( j == 2 ) {
+					if ( strSplitColumn[j].indexOf("O") < 0 ) strCommnetFg += strSplitColumn[j] + " ";
+				} else {
+					strCommnetFg += strSplitColumn[j] + " ";
+				}
+
+			}
+
+			strCommnetFg	= strCommnetFg.slice(0, -1);
+
+			strCommnet += "COMMENT ON COLUMN " + gbTableName + "." + strSplitColumn[0].toUpperCase() + " IS '" + strCommnetFg + "';\n";
+
+		}
+
+	}
+
+	document.getElementById('txtNexacro1').value = strDataSetId;
+	document.getElementById('txtNexacroMod').value = strModify;
+	document.getElementById('txtNexacroCom').value = strCommnet;
+}
+
+</script>
+ </HEAD>
+
+ <BODY>
+ <input type="hidden" text="나이스 홈페이지에서 받은 PDF중 TABLE 관련 내용이 있다.
+ 이부분을 엑셀에 복사한 후 텍스트 나누기 공백으로 나누면 한칸 한칸 나뉘어 진다.
+ 그 나눠진 부분에서 1테이블에 관련된 부분을 복사해서 변환 및 TABLE 생성을 누르면 해당 스크립트가 만들어진다.
+ 오류나 수정이 필요한 부분은 확인자가 스크립트 확인해서 수정 하고 버전 관리 하면 된다."/>
+	<h1>DB_COLUMN_ADD Conversion</h1>
+	<h4>설명은 개발자 도구의 hidden 참조</h4>
+	<table>
+		<tr >
+			<td width="400">
+				<div style="float:left; width:445px; height:400px;">
+					PDF_오리지날
+					<textarea id="txtExria1" wrap="off" style="width:435px; height:380px"></textarea>
+				</div>
+			</td>
+			<td>
+				<div style="float:left;">
+					<button onclick="btn1_onclick();">변환</button>
+				</div>
+			</td>
+			<td>
+				<div style="float:left; width:400px; height:400px;">
+					COLUMN_ADD변환
+					<textarea id="txtNexacro1" wrap="off" style="width:390px; height:380px"></textarea>
+				</div>
+			</td>
+		</tr>
+		<tr height="10px"></tr>
+		<tr >
+			<td width="400">
+				<div style="float:left; width:445px; height:400px;">
+					COLUMN_MOD변환
+					<textarea id="txtNexacroMod" wrap="off" style="width:435px; height:380px"></textarea>
+				</div>
+			</td>
+			<td>
+				<div style="float:left;">
+<!-- 					<button onclick="btn1_onclick();">변환</button> -->
+				</div>
+			</td>
+			<td>
+				<div style="float:left; width:400px; height:400px;">
+					COLUMN_COMMNET변환
+					<textarea id="txtNexacroCom" wrap="off" style="width:390px; height:380px"></textarea>
+				</div>
+			</td>
+		</tr>
+	</table>
+ </BODY>
+</HTML>

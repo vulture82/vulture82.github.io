@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv= "content-type" content ="text/html charset=euc-kr" />
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../css/ayjCss.css">
+<link href="../css/jquery.numberedtextarea.css" rel="stylesheet" type="text/css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="../script/jquery.numberedtextarea.js"></script>
+
+<style>
+body { font-size:14x;}
+textarea {background:#34495E; color:#fff; padding:20px;}
+</style>
+
+</head>
+<script type="text/javascript">
+
+function autoGrid_OnLoadCompleted()
+{
+	//document.getElementById('txtColumnNm').value	= "학번\n성명";
+	document.getElementById('txtColumn').value		= "STD_NO\nKOR_NM";
+	document.getElementById('edMainDs').focus();
+
+}
+
+var root;
+function preBtn1_onclick()
+{
+}
+
+</script>
+ </HEAD>
+
+ <BODY>
+ <textarea cols="60" rows="5" class="form-control" spellcheck="false"></textarea>
+	<h1>마이플랫폼 엑셀업로드 v1</h1>
+	<table class="blueTable">
+		<tbody>
+			<tr>
+				<td>ORACLE_TABLE_NAME</td>
+				<td><input type="text" id="edMainDs" name="edTableName" size="20" value="EXAM120" /></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br />
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>Column Name</th>
+				<th>Comments</th>
+				<th>Data Type(VARCHAR2 (8 Byte) or NUMBER (4))</th>
+				<th>Size</th>
+				<th>Pk(1/0)</th>
+				<th>Not Null(1/0)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><textarea id="txtColumnName" wrap="off" style="width:98%; height:200px;"></textarea></td>
+				<td><textarea id="txtCommets" wrap="off" style="width:98%; height:200px;"></textarea></td>
+				<td><textarea id="txtDataType" wrap="off" style="width:98%; height:200px;"></textarea></td>
+				<td><textarea id="txtSize" wrap="off" style="width:98%; height:200px;"></textarea></td>
+				<td><textarea id="txtPk" wrap="off" style="width:98%; height:200px;"></textarea></td>
+				<td><textarea id="txtNotNull" wrap="off" style="width:98%; height:200px;"></textarea></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div>
+		<p style="float:right;"><button type="button" onClick="btn1_onclick();">생성</button></p>
+	</div>
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>ORACLE TABLE SCRIPT</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><textarea id="txtComplete" wrap="off" style="width:99%; height:200px;"></textarea></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br />
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>*사용방법</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>1. 주석 쓸내용이 없으면 아무것도 안써도 된다.</td>
+			</tr>
+			<tr>
+				<td>2. 주석을 사용할려면 컬럼과 사이즈(갯수)를 맞춰야된다.</td>
+			</tr>
+		</tbody>
+	</table>
+<script>
+$('textarea').numberedtextarea();
+</script>
+ </BODY>
+</HTML>

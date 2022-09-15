@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-Transitional.dtd" >
+<HTML>
+ <HEAD>
+  <TITLE> svc_conversion </TITLE>
+	<meta http-equiv= "content-type" content ="text/html charset=euc-kr" />
+	<META NAME="Generator" CONTENT="EditPlus">
+	<META NAME="Author" CONTENT="">
+	<META NAME="Keywords" CONTENT="">
+	<META NAME="Description" CONTENT="">
+
+<link rel="stylesheet" type="text/css" href="../ayjCss.css">
+<script type="text/javascript">
+function button1()
+{
+	//객체 생성부분
+
+	var AA = document.forms;
+	console.log(AA);
+	/*
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+		xmlhttp = new XMLHttpRequest();
+	}
+	else {
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+
+	//Ajax구현부분
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			 document.location.href = 'http://www.naver.com';
+		}
+	}
+	xmlhttp.open("POST", "http://", true);
+	xmlhttp.send(document.forms);
+	*/
+
+
+	/*
+	<A HREF="javascript:location.replace('http://mportal.ajou.ac.kr/main.do#')">test replace</A>
+	<A HREF="javascript:location.href='http://mportal.ajou.ac.kr/main.do#'">test href</A>
+	*/
+}
+
+function button2()
+{
+	//객체 생성부분
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+		xmlhttp = new XMLHttpRequest();
+	}
+	else {
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+
+	//Ajax구현부분
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			 //통신 성공시 구현부분
+		}
+	}
+	xmlhttp.open("GET", "exam.xml", true);
+	xmlhttp.send(document.forms);
+}
+
+</script>
+ </HEAD>
+
+ <BODY>
+	<form>
+		<input type="hidden" name="userNo" value="vulture82">
+		<input type="hidden" name="korNm" value="안윤준">
+	</form>
+	<button type="button" onclick="button1();">1</button>
+	<button type="button" onclick="button2();">2</button>
+ </BODY>
+</HTML>

@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-Transitional.dtd" >
+<HTML>
+ <HEAD>
+  <TITLE> 나이스_DB_Merge </TITLE>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8">
+	<META NAME="Generator" CONTENT="EditPlus">
+	<META NAME="Author" CONTENT="">
+	<META NAME="Keywords" CONTENT="">
+	<META NAME="Description" CONTENT="">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+var gbTableName		= ""; //테이블명
+var gbTableComment  = ""; //테이블_코멘트
+function btn1_onclick()
+{
+	var text = document.getElementById('txtExria1').value;
+		text = text.slice(0, -1);
+
+	var arrayOfLines 			= text.split('\n');
+	var strColumnName			= new Array(); // 컬럼명
+	var strSplitTable			= ""; // 테이블명_정규식(통과한부분 저장)
+	var strSplitTableComment	= ""; // 테이블_코멘트_정규식(통과한부분 저장)
+	var strSplitColumn			= ""; // 컬럼명_정규식(통과한부분 저장)
+	var strDataSetId			= ""; // 결과값
+	var pattern					= /([a-zA-Z])\w+/gi;
+	var pattern2				= /\(.*\)/gi;
+
+
+	for ( var i=0; i<arrayOfLines.length; i++ ) {
+		if ( i == 0 ) {
+			strSplitTable			= pattern.exec(arrayOfLines[i].trim());
+			gbTableName				= strSplitTable[0].toUpperCase();		// 테이블명_대문자
+
+			strSplitTableComment	= pattern2.exec(arrayOfLines[i].trim());
+			strSplitTableComment	= strSplitTableComment[0].slice(0, -1);
+			gbTableComment			= strSplitTableComment.substring(1);	// 테이블_코멘트
+
+		} else if ( i == 1 ) {
+			strDataSetId += "ALTER TABLE " + gbTableName + " ADD (" + "EXAM_YY" + " " + "VARCHAR2(4)" + ");\n";
+
+		} else {
+			strSplitColumn = arrayOfLines[i].split(" ");
+			if ( strSplitColumn[1].indexOf("TEXT") < 0 ) {
+				strDataSetId += "ALTER TABLE " + gbTableName + " ADD (" + strSplitColumn[0].toUpperCase() + " " + strSplitColumn[1] + ");\n";
+			} else {
+				strDataSetId += "ALTER TABLE " + gbTableName + " ADD (" + strSplitColumn[0].toUpperCase() + " " + "CLOB" + ");\n";
+			}
+
+		}
+
+	}
+
+	/*
+	for ( var i=0; i<arrayOfLines.length; i++ ) {
+		if ( arrayOfLines[i].trim().indexOf("테이블") > 0 ) { // 테이블이라는 명칭이 있는줄을 찾는다
+			strSplitTable	= pattern.exec(arrayOfLines[i].trim());
+			gbTableName	= strSplitTable[0].toUpperCase();
+
+		} else {
+			if ( pattern.test(arrayOfLines[i]) ){
+				strColumnName.push(arrayOfLines[i].trim().toUpperCase());
+			}
+
+		}
+	}
+
+	for ( var j=0; j<strColumnName.length; j++ ) {
+		strSplitColumn = strColumnName[j].split("\t");
+		if ( strSplitColumn[1].indexOf("TEXT") < 0 ) {
+			strDataSetId += "ALTER TABLE " + gbTableName + " ADD (" + strSplitColumn[0] + " " + strSplitColumn[1] + ");\n";
+		} else {
+			strDataSetId += "ALTER TABLE " + gbTableName + " ADD (" + strSplitColumn[0] + " " + "CLOB" + ");\n";
+		}
+
+	}
+	*/
+	strDataSetId += "\n";
+	document.getElementById('txtNexacro1').value = strDataSetId; // 초기화
+
+	btn2_onclick();
+}
+
+function btn2_onclick()
+{
+	var text = document.getElementById('txtExria1').value;
+		text = text.slice(0, -1);
+	var arrayOfLines 	= text.split('\n');
+
+	var strColumnComment	= new Array(); // 컬럼코멘트(전체)
+	var strComment			= ""; // 컬럼코멘트(명칭)
+	var strPkColumn			= ""; // PK인 COLUMN
+	var strSplitColumn		= ""; // 컬럼명_정규식(통과한부분 저장)
+	var strDataSetId		= ""; // 결과값
+
+	strDataSetId += "ALTER TABLE EXM." + gbTableName + " DROP PRIMARY KEY CASCADE;\n\n";
+
+	strDataSetId += "DROP TABLE EXM." + gbTableName + " CASCADE CONSTRAINTS;\n\n";
+
+	strDataSetId += "CREATE TABLE EXM." + gbTableName + "(\n";
+	strDataSetId += "EXAM_YY VARCHAR2(4) NOT NULL,\n";
+	for ( var i=0; i<arrayOfLines.length; i++ ) {
+
+		if ( i > 1 ) {
+			strSplitColumn = arrayOfLines[i].split("\t");
+			if ( strSplitColumn[2].indexOf("O") > -1 ){
+				strPkColumn += strSplitColumn[0].toUpperCase() + ",";
+				strComment = strSplitColumn[3];
+				if ( strSplitColumn[1].indexOf("TEXT") < 0 ) {
+					strDataSetId += strSplitColumn[0].toUpperCase() + " " + strSplitColumn[1] + " NOT NULL,\n";
+
+				} else {
+					strDataSetId += strSplitColumn[0].toUpperCase() + " " + "CLOB" + " NOT NULL,\n";
+
+				}
+			} else {
+				strComment = strSplitColumn[2];
+				if ( strSplitColumn[1].indexOf("TEXT") < 0 ) {
+					strDataSetId += strSplitColumn[0].toUpperCase() + " " + strSplitColumn[1] + ",\n";
+
+				} else {
+					strDataSetId += strSplitColumn[0].toUpperCase() + " " + "CLOB" + ",\n";
+
+				}
+			}
+
+			strColumnComment.push("COMMENT ON COLUMN EXM." + gbTableName + "." + strSplitColumn[0].toUpperCase() + " IS '" + strComment + "';\n");
+
+		}
+	}
+
+	strDataSetId = strDataSetId.slice(0, -2);
+	strDataSetId += "\n)\n\n";
+	strDataSetId += "TABLESPACE EXM_DATA\n";
+	strDataSetId += "PCTUSED    0\n";
+	strDataSetId += "PCTFREE    10\n";
+	strDataSetId += "INITRANS   1\n";
+	strDataSetId += "MAXTRANS   255\n";
+	strDataSetId += "STORAGE    (\n";
+	strDataSetId += "\t\t\tINITIAL          64K\n";
+	strDataSetId += "\t\t\tNEXT             1M\n";
+	strDataSetId += "\t\t\tMINEXTENTS       1\n";
+	strDataSetId += "\t\t\tMAXEXTENTS       UNLIMITED\n";
+	strDataSetId += "\t\t\tPCTINCREASE      0\n";
+	strDataSetId += "\t\t\tFREELISTS        1\n";
+	strDataSetId += "\t\t\tFREELIST GROUPS  1\n";
+	strDataSetId += "\t\t\tBUFFER_POOL      DEFAULT\n";
+	strDataSetId += "\t\t   )\n";
+	strDataSetId += "LOGGING \n";
+	strDataSetId += "NOCOMPRESS \n";
+	strDataSetId += "NOCACHE\n";
+	strDataSetId += "NOPARALLEL\n";
+	strDataSetId += "MONITORING;\n\n";
+
+	strDataSetId += "COMMENT ON TABLE EXM." + gbTableName + " IS '" + gbTableComment + "';\n";
+	strDataSetId += "COMMENT ON COLUMN EXM." + gbTableName + ".EXAM_YY IS '입시년도';\n";
+
+	for ( var i=0; i<strColumnComment.length; i++ ) {
+		strDataSetId += strColumnComment[i];
+	}
+
+	strPkColumn = strPkColumn.slice(0 ,-1);
+
+	strDataSetId += "\n";
+
+	strDataSetId += "CREATE UNIQUE INDEX EXM." + gbTableName + "_ ON EXM." + gbTableName + "\n";
+	strDataSetId += "(" + strPkColumn + ")\n";
+	strDataSetId += "LOGGING\n";
+	strDataSetId += "TABLESPACE EXM_DATA\n";
+	strDataSetId += "PCTFREE    10\n";
+	strDataSetId += "INITRANS   2\n";
+	strDataSetId += "MAXTRANS   255\n";
+	strDataSetId += "STORAGE    (\n";
+	strDataSetId += "            INITIAL          64K\n";
+	strDataSetId += "            NEXT             1M\n";
+	strDataSetId += "            MINEXTENTS       1\n";
+	strDataSetId += "            MAXEXTENTS       UNLIMITED\n";
+	strDataSetId += "            PCTINCREASE      0\n";
+	strDataSetId += "            FREELISTS        1\n";
+	strDataSetId += "            FREELIST GROUPS  1\n";
+	strDataSetId += "            BUFFER_POOL      DEFAULT\n";
+	strDataSetId += "           )\n";
+	strDataSetId += "NOPARALLEL;\n";
+	strDataSetId += "\n";
+	strDataSetId += "\n";
+	strDataSetId += "ALTER TABLE EXM." + gbTableName + " ADD (\n";
+	strDataSetId += "  CONSTRAINT " + gbTableName + "_\n";
+	strDataSetId += "  PRIMARY KEY\n";
+	strDataSetId += "  (" + strPkColumn + ")\n";
+	strDataSetId += "  USING INDEX EXM." + gbTableName + "_);\n";
+
+	document.getElementById('txtNexacro2').value = strDataSetId; // 초기화
+}
+
+</script>
+ </HEAD>
+
+ <BODY>
+ <input type="hidden" text="나이스 홈페이지에서 받은 PDF중 TABLE 관련 내용이 있다.
+ 이부분을 엑셀에 복사한 후 텍스트 나누기 공백으로 나누면 한칸 한칸 나뉘어 진다.
+ 그 나눠진 부분에서 1테이블에 관련된 부분을 복사해서 변환 및 TABLE 생성을 누르면 해당 스크립트가 만들어진다.
+ 오류나 수정이 필요한 부분은 확인자가 스크립트 확인해서 수정 하고 버전 관리 하면 된다."/>
+	<h1>DB_COLUMN_ADD Conversion</h1>
+	<h4>설명은 개발자 도구의 hidden 참조</h4>
+	<table>
+		<tr >
+			<td width="400">
+				<div style="float:left; width:445px; height:400px;">
+					PDF_오리지날
+					<textarea id="txtExria1" wrap="off" style="width:435px; height:380px"></textarea>
+				</div>
+			</td>
+			<td>
+				<div style="float:left;">
+					<button onclick="btn1_onclick();">변환</button>
+				</div>
+				<!--
+				<br />
+				<div>
+					<button onclick="btn2_onclick();">TABLE 생성</button>
+				</div>
+				-->
+			</td>
+			<td>
+				<div style="float:left; width:400px; height:400px;">
+					COLUMN_ADD변환
+					<textarea id="txtNexacro1" wrap="off" style="width:390px; height:380px"></textarea>
+				</div>
+			</td>
+		</tr>
+		<tr height="10px"></tr>
+		<tr >
+			<td colspan="3">
+				<textarea id="txtNexacro2" wrap="off" style="width:886px; height:390px"></textarea>
+			</td>
+		</tr>
+	</table>
+ </BODY>
+</HTML>

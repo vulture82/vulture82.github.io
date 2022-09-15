@@ -1,0 +1,265 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv= "content-type" content ="text/html charset=euc-kr" />
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../css/ayjCss.css">
+<link href="../css/jquery.numberedtextarea.css" rel="stylesheet" type="text/css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="../script/jquery.numberedtextarea.js"></script>
+
+<style>
+body { font-size:14x;}
+textarea {background:#34495E; color:#fff; padding:20px;}
+</style>
+
+</head>
+<script type="text/javascript">
+
+function autoGrid_OnLoadCompleted()
+{
+	$('#txtColumnName').val('EXAM_YY\nCOLL_FG\nSELT_FG\nAPLY_FG\nLANG_SEL_TYPE\nMATH_SEL_TYPE\nSRCH_SEL_TYPE\nSRCH_SBJT_NO_1\nSRCH_SBJT_NO_2\nFRN_SEL_TYPE\nREMK\nREG_ID\nREG_DTTM\nREG_IP\nMOD_ID\nMOD_DTTM\nMOD_IP');
+	$('#txtCommets').val('입시년도\n모집구분\n전형구분\n응시구분\n국어영역 선택과목\n수학영역 선택과목\n탐구영역 구분\n탐구영역 제1선택과목\n탐구영역 제2선택과목\n제2외국어/한문 선택과목\n비고\n등록자ID\n등록일시\n등록자IP\n수정자ID\n수정일시\n수정자IP');
+	$('#txtDataType').val('VARCHAR2 (4 Byte)\nVARCHAR2 (10 Byte)\nVARCHAR2 (10 Byte)\nVARCHAR2 (8 Byte)\nVARCHAR2 (8 Byte)\nVARCHAR2 (8 Byte)\nVARCHAR2 (8 Byte)\nVARCHAR2 (10 Byte)\nVARCHAR2 (10 Byte)\nVARCHAR2 (8 Byte)\nVARCHAR2 (400 Byte)\nVARCHAR2 (20 Byte)\nDATE\nVARCHAR2 (20 Byte)\nVARCHAR2 (20 Byte)\nDATE\nVARCHAR2 (20 Byte)');
+	$('#txtPk').val('1\n1\n1\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0');
+	$('#txtNotNull').val('1\n1\n1\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0');
+}
+
+function preBtn1_onclick()
+{
+	// MainDs Check
+	var strBindDataset = $.trim($('#edMainDs').val());
+
+	if ( strBindDataset.length == 0 ) {
+		alert("[MainDs] 이름을 작성해 주시기 바랍니다...!");
+		document.getElementById('edMainDs').focus();
+		return false;
+	}
+
+	return true;
+}
+
+function btn1_onclick()
+{
+	if ( !preBtn1_onclick() ){
+		return;
+	}
+
+	$('#txtComplete').val(""); // 초기화
+
+	var tmp1 = $.trim($('#txtColumnName').val());
+	var tmp2 = $.trim($('#txtCommets').val());
+	var tmp3 = $.trim($('#txtDataType').val());
+	var tmp4 = $.trim($('#txtPk').val());
+	var tmp5 = $.trim($('#txtNotNull').val());
+
+	var arrColumnName 	= tmp1.split('\n');
+	var arrComments 	= tmp2.split('\n');
+	var arrDataType 	= tmp3.split('\n');
+	var arrPk 			= tmp4.split('\n');
+	var arrNotNull 		= tmp5.split('\n');
+
+	if ( tmp1.length > 0 ) {
+		if (arrColumnName.length != arrComments.length ) {
+			alert("Column Name 과 Comments 갯수가 다릅니다.");
+			$("#arrColumnName").focus();
+			return;
+		}
+
+		if (arrComments.length != arrDataType.length ) {
+			alert("Comments 와 Data Type 의 갯수가 다릅니다.");
+			$("#txtCommets").focus();
+			return;
+		}
+	}
+
+	var test_text1	= "";
+	var strComplete = "";
+
+	var strMainDs			= $.trim($('#edMainDs').val());
+	var strTableSpace 		= $('#selTableSpace').val();
+	var strMainComment 		= $.trim($('#edDsComment').val());
+	
+	var strGrid0 = "";
+	var strGrid1 = "";
+	var strGrid2 = "";
+	var strGrid3 = "COMMENT ON TABLE " + strMainDs + " IS '" + strMainComment + "';"; // Comments
+	var strGrid4 = ""; // PK 설정
+	var cnt = 0; // PK 체크
+	var strPk = "";
+
+	strGrid0 = "ALTER TABLE " + strMainDs + " DROP PRIMARY KEY CASCADE;\n\n";
+	strGrid0 += "DROP TABLE " + strMainDs + " CASCADE CONSTRAINTS;\n\n";
+
+	strGrid1 = "CREATE TABLE " + strMainDs + "(";
+
+	for ( var i=0; i<arrNotNull.length; i++ ) {
+		if ( arrNotNull[i] == "1"){
+			arrNotNull[i] = "NOT NULL";
+		} else {
+			arrNotNull[i] = "";
+		}
+	}
+
+	for ( var i=0; i<arrColumnName.length; i++ ) {
+		strGrid1 += "\n\t" + arrColumnName[i] + "\t" + arrDataType[i].replace(" (", "(") + "\t" + arrNotNull[i] + ",";
+		strGrid3 += "\nCOMMENT ON COLUMN " + strMainDs + "." + arrColumnName[i] + " IS '" + arrComments[i] + "';";
+		
+		// PK 설정
+		if ( arrPk[i] == "1") {
+			strPk += arrColumnName[i] + ",";
+			cnt++;
+		}
+	}
+
+	strGrid1 = strGrid1.slice(0, -1) + "\n)";
+
+	strGrid2 = `\n
+TABLESPACE ` + strTableSpace + `_DATA
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+	INITIAL          128K
+	NEXT             1M
+	MINEXTENTS       1
+	MAXEXTENTS       UNLIMITED
+	PCTINCREASE      0
+	BUFFER_POOL      DEFAULT
+)
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;\n
+`;
+	
+	if ( cnt > 0 ) {
+		strPk = "(" + strPk.slice(0, -1) + ")";
+		strGrid4 = `\n
+CREATE UNIQUE INDEX ` + strMainDs + ` ON ` + strMainDs + `\n` +
+strPk + `
+LOGGING
+TABLESPACE ` + strTableSpace + `_DATA
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+NOPARALLEL;
+
+ALTER TABLE ` + strMainDs + ` ADD (
+  CONSTRAINT ` + strMainDs + `_
+  PRIMARY KEY`
+  + strPk + `
+  USING INDEX ` + strMainDs + `_);`;
+	}
+
+	strComplete = strGrid0 + strGrid1 + strGrid2 + strGrid3 + strGrid4;
+
+	console.log(strComplete);
+
+	$('#txtComplete').val(strComplete);
+}
+
+</script>
+ </HEAD>
+
+ <BODY onload="autoGrid_OnLoadCompleted()">
+	<h1>마이플랫폼 엑셀업로드 v1</h1>
+	<table class="blueTable">
+		<tbody>
+			<tr>
+				<td>Table Space</td>
+				<td>
+					<select id="selTableSpace" name="selTableSpace">
+						<option value="ADM">ADM</option>
+						<option value="COM">COM</option>
+						<option value="EXM">EXM</option>
+						<option value="PAT">PAT</option>
+						<option value="RES">RES</option>
+						<option value="UNI">UNI</option>
+					</select>
+				</td>
+				<td>ORACLE TABLE NAME</td>
+				<td><input type="text" id="edMainDs" name="edTableName" size="20" value="EXAM120" /></td>
+				<td>ORACLE TABLE Comment</td>
+				<td><input type="text" id="edDsComment" name="edTableName" size="20" value="모집구분별 전형관리" /></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br />
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>Column Name</th>
+				<th>Comments</th>
+				<th>Data Type(VARCHAR2 (8 Byte))</th>
+				<th>Pk(1/0)</th>
+				<th>Not Null(1/0)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><textarea id="txtColumnName" wrap="off" style="width:98%; height:200px;"></textarea></td>
+				<td><textarea id="txtCommets" wrap="off" style="width:98%; height:200px;"></textarea></td>
+				<td><textarea id="txtDataType" wrap="off" style="width:98%; height:200px;"></textarea></td>
+				<td><textarea id="txtPk" wrap="off" style="width:98%; height:200px;"></textarea></td>
+				<td><textarea id="txtNotNull" wrap="off" style="width:98%; height:200px;"></textarea></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div>
+		<p style="float:right;"><button type="button" onClick="btn1_onclick();">생성</button></p>
+	</div>
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>ORACLE TABLE SCRIPT</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><textarea id="txtComplete" wrap="off" style="width:99%; height:200px;"></textarea></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br />
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>*사용방법</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>1. 주석 쓸내용이 없으면 아무것도 안써도 된다.</td>
+			</tr>
+			<tr>
+				<td>2. 주석을 사용할려면 컬럼과 사이즈(갯수)를 맞춰야된다.</td>
+			</tr>
+		</tbody>
+	</table>
+<script>
+$('textarea').numberedtextarea();
+</script>
+ </BODY>
+</HTML>

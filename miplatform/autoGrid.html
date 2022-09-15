@@ -2,8 +2,8 @@
 <HTML>
  <HEAD>
   <TITLE> svc_conversion </TITLE>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR" />
+  <meta charset="EUC-KR">
 	<META NAME="Generator" CONTENT="EditPlus">
 	<META NAME="Author" CONTENT="">
 	<META NAME="Keywords" CONTENT="">
@@ -12,11 +12,11 @@
 <link rel="stylesheet" type="text/css" href="../css/ayjCss.css">
 <script type="text/javascript">
 // ------------------------------------------------------------------
-// 1. 2018.09.28 checkbox À¯¹« false ½Ã ¼ø¹øÀ¸·Î Àû¿ë
+// 1. 2018.09.28 checkbox ìœ ë¬´ false ì‹œ ìˆœë²ˆìœ¼ë¡œ ì ìš©
 // ------------------------------------------------------------------
 function autoGrid_OnLoadCompleted()
 {
-	document.getElementById('txtColumnNm').value	= "ÇĞ¹ø\n¼º¸í";
+	document.getElementById('txtColumnNm').value	= "í•™ë²ˆ\nì„±ëª…";
 	document.getElementById('txtColumn').value		= "STD_NO\nKOR_NM";
 	document.getElementById('edLeft').focus();
 
@@ -29,7 +29,7 @@ function preBtn1_onclick()
 	var strBindDataset = document.getElementById('edBindDataset').value.trim();
 
 	if ( strBindDataset.length == 0 ) {
-		alert("[BindDataset] ÀÌ¸§À» ÀÛ¼ºÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù...!");
+		alert("[BindDataset] ì´ë¦„ì„ ì‘ì„±í•´ ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤...!");
 		document.getElementById('edBindDataset').focus();
 		return false;
 	}
@@ -38,7 +38,7 @@ function preBtn1_onclick()
 	var strGridId = document.getElementById('edGridId').value.trim();
 
 	if ( strGridId.length == 0 ) {
-		alert("[GridId] ÀÌ¸§À» ÀÛ¼ºÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù...!");
+		alert("[GridId] ì´ë¦„ì„ ì‘ì„±í•´ ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤...!");
 		document.getElementById('edGridId').focus();
 		return false;
 	}
@@ -47,7 +47,7 @@ function preBtn1_onclick()
 	var strWidth = document.getElementById('edWidth').value.trim();
 
 	if ( strWidth.length == 0 ) {
-		alert("[Width] ³ĞÀÌ¸¦ ÀÛ¼ºÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù...!");
+		alert("[Width] ë„“ì´ë¥¼ ì‘ì„±í•´ ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤...!");
 		document.getElementById('edWidth').focus();
 		return false;
 	}
@@ -56,7 +56,7 @@ function preBtn1_onclick()
 	var strHeight = document.getElementById('edHeight').value.trim();
 
 	if ( strHeight.length == 0 ) {
-		alert("[Heigth] ³ôÀÌ¸¦ ÀÛ¼ºÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù...!");
+		alert("[Heigth] ë†’ì´ë¥¼ ì‘ì„±í•´ ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤...!");
 		document.getElementById('edHeight').focus();
 		return false;
 	}
@@ -71,8 +71,8 @@ function btn1_onclick()
 		return;
 	}
 
-	// dataset id ±îÁö »ç¿ë ÇÒ¶§
-	document.getElementById('txtComplete').value = ""; // ÃÊ±âÈ­
+	// dataset id ê¹Œì§€ ì‚¬ìš© í• ë•Œ
+	document.getElementById('txtComplete').value = ""; // ì´ˆê¸°í™”
 
 	var tmp1 = document.getElementById('txtColumnNm').value.trim();
 	var tmp2 = document.getElementById('txtColumn').value.trim();
@@ -81,7 +81,7 @@ function btn1_onclick()
 	var arrColumn 		= tmp2.split('\n');
 
 	if (arrColumnNm.length != arrColumn.length ) {
-		alert("[ÄÃ·³¸í] °ú [ÄÃ·³] °³¼ö°¡ ´Ù¸¨´Ï´Ù.");
+		alert("[ì»¬ëŸ¼ëª…] ê³¼ [ì»¬ëŸ¼] ê°œìˆ˜ê°€ ë‹¤ë¦…ë‹ˆë‹¤.");
 		document.getElementById('txtColumnNm').focus();
 		return;
 	}
@@ -89,36 +89,36 @@ function btn1_onclick()
 	var test_text1	= "";
 	var strComplete = "";
 
-	// AutoFit À¯¹«
+	// AutoFit ìœ ë¬´
 	var chkAutoFit	= document.querySelector('input[name="rdAutoFit"]:checked').value;
 	var strAutoFit	= (chkAutoFit == "Y") ? "TRUE" : "false";
 
-	// Ã¼Å©¹Ú½º À¯¹«
+	// ì²´í¬ë°•ìŠ¤ ìœ ë¬´
 	var chkCheckBox = document.querySelector('input[name="rdCheckBox"]:checked').value;
 
-	// Summary À¯¹«
+	// Summary ìœ ë¬´
 	var chkSummary	= document.querySelector('input[name="rdSummary"]:checked').value;
 
-	// Left °ª
+	// Left ê°’
 	var strLeft			= document.getElementById('edLeft').value.trim();
 
-	// Top °ª
+	// Top ê°’
 	var strTop			= document.getElementById('edTop').value.trim();
 
-	// Width °ª
+	// Width ê°’
 	var strWidth		= document.getElementById('edWidth').value.trim();
 
-	// Height °ª
+	// Height ê°’
 	var strHeight		= document.getElementById('edHeight').value.trim();
 
-	// BindDataset ÀÌ¸§
+	// BindDataset ì´ë¦„
 	var strBindDataset	= document.getElementById('edBindDataset').value.trim();
 
-	// GridId ÀÌ¸§
+	// GridId ì´ë¦„
 	var strGridId		= document.getElementById('edGridId').value.trim();
 
 
-	// GRID »ı¼º½ÃÀÛ
+	// GRID ìƒì„±ì‹œì‘
 	var strGridSouCe	 = '';
 	var strGrid1		 = '\t\t<Grid AutoEnter="TRUE" BkColor2="default" BkSelColor="user8" BoldHead="true" Border="Flat" BorderColor="silver" Bottom="468" Color="user15" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadHeight="24" InputPanel="FALSE" LineColor="silver" MinWidth="100" OnHeadClick="gdMain_OnHeadClick" Right="990" RowHeight="24" SelColor="user15" TabOrder="3" TabStop="true" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="silver" WheelScrollRow="1" ';
 		strGrid1		+= 'AutoFit="' + strAutoFit + '" Left="' + strLeft + '" Top="' + strTop + '" Width="' + strWidth + '" Height="' + strHeight + '" BindDataset="' + strBindDataset + '" Id="' + strGridId + '" >\n';
@@ -128,26 +128,26 @@ function btn1_onclick()
 		strGrid2		+= '\t\t\t\t\t<columns>\n';
 
 	var strGrid3		 = ( chkCheckBox == 'Y'  ) ? '\t\t\t\t\t\t<col width="25"/>\n' : '\t\t\t\t\t\t<col width="40"/>\n';
-	var strGrid4		 = ( chkCheckBox == 'Y'  ) ? '\t\t\t\t\t\t<cell bkcolor="user4" col="0" color="user1" display="checkbox" font="±¼¸²Ã¼,9"/>\n' : '\t\t\t\t\t\t<cell bkcolor="user4" col="0" color="user1" display="text" font="±¼¸²,9" text="¼ø¹ø"/>\n';
+	var strGrid4		 = ( chkCheckBox == 'Y'  ) ? '\t\t\t\t\t\t<cell bkcolor="user4" col="0" color="user1" display="checkbox" font="êµ´ë¦¼ì²´,9"/>\n' : '\t\t\t\t\t\t<cell bkcolor="user4" col="0" color="user1" display="text" font="êµ´ë¦¼,9" text="ìˆœë²ˆ"/>\n';
 
-	// ÄÃ·³¸í
+	// ì»¬ëŸ¼ëª…
 	for ( var i=0; i<arrColumnNm.length; i++ ) {
-		strGrid3		+= '\t\t\t\t\t\t<col width="' + arrColumnNm[i].length * 20 + '"/>\n'; // ÄÃ·³¸í*20 width
-		strGrid4		+= '\t\t\t\t\t\t<cell bkcolor="user4" col="' + ( chkCheckBox == 'Y' ? i + 1 : i + 1 ) + '" color="user1" display="text" font="±¼¸²Ã¼,9" text="' + arrColumnNm[i] + '"/>\n';
+		strGrid3		+= '\t\t\t\t\t\t<col width="' + arrColumnNm[i].length * 20 + '"/>\n'; // ì»¬ëŸ¼ëª…*20 width
+		strGrid4		+= '\t\t\t\t\t\t<cell bkcolor="user4" col="' + ( chkCheckBox == 'Y' ? i + 1 : i + 1 ) + '" color="user1" display="text" font="êµ´ë¦¼ì²´,9" text="' + arrColumnNm[i] + '"/>\n';
 	}
 
 		strGrid3		+= '\t\t\t\t\t</columns>\n\t\t\t\t\t<head>\n';
 		strGrid4		+= '\t\t\t\t\t</head>\n\t\t\t\t\t<body>\n';
 
-	var strGrid5		 = ( chkCheckBox == 'Y'  ) ? '\t\t\t\t\t\t<cell align="center" bkcolor="user3" bkcolor2="user9" col="0" colid="chk" color="user15" display="checkbox" edit="checkbox"/>\n' : '\t\t\t\t\t\t<cell align="left" bkcolor="user3" bkcolor2="user9" col="0" color="user15" display="text" expandcolor="user15" font="±¼¸²Ã¼,9" expr="row+1"/>\n';
+	var strGrid5		 = ( chkCheckBox == 'Y'  ) ? '\t\t\t\t\t\t<cell align="center" bkcolor="user3" bkcolor2="user9" col="0" colid="chk" color="user15" display="checkbox" edit="checkbox"/>\n' : '\t\t\t\t\t\t<cell align="left" bkcolor="user3" bkcolor2="user9" col="0" color="user15" display="text" expandcolor="user15" font="êµ´ë¦¼ì²´,9" expr="row+1"/>\n';
 
 
-	// ÄÃ·³
+	// ì»¬ëŸ¼
 	var strLowColumn	= '';
 
 	for ( var i=0; i<arrColumn.length; i++ ) {
 		strLowColumn	= arrColumn[i].toLowerCase();
-		strGrid5		+= '\t\t\t\t\t\t<cell align="center" bkcolor="user3" bkcolor2="user9" col="' + ( chkCheckBox == 'Y' ? i+1 : i+1 ) + '" colid="' + dashToCamel(strLowColumn) + '" color="user15" display="text" font="±¼¸²Ã¼,9"/>\n';
+		strGrid5		+= '\t\t\t\t\t\t<cell align="center" bkcolor="user3" bkcolor2="user9" col="' + ( chkCheckBox == 'Y' ? i+1 : i+1 ) + '" colid="' + dashToCamel(strLowColumn) + '" color="user15" display="text" font="êµ´ë¦¼ì²´,9"/>\n';
 	}
 
 		strGrid5		+= '\t\t\t\t\t</body>\n';
@@ -156,7 +156,7 @@ function btn1_onclick()
 
 	if ( chkSummary == 'Y' ) {
 		strGrid6		+= '\t\t\t\t\t<summary>\n';
-		strGrid6		+= '\t\t\t\t\t\t<cell align="left" bkcolor="user25" col="0" color="user19" colspan="' + ( chkCheckBox == 'Y' ? arrColumn.length+1 : arrColumn.length+1 ) + '" display="text" expr="&apos;[°Ç¼ö:&apos;&#32;+&#32;rowcount()+&apos;]&apos;" Valign="Center"/>\n';
+		strGrid6		+= '\t\t\t\t\t\t<cell align="left" bkcolor="user25" col="0" color="user19" colspan="' + ( chkCheckBox == 'Y' ? arrColumn.length+1 : arrColumn.length+1 ) + '" display="text" expr="&apos;[ê±´ìˆ˜:&apos;&#32;+&#32;rowcount()+&apos;]&apos;" Valign="Center"/>\n';
 		strGrid6		+= '\t\t\t\t\t</summary>\n';
 	}
 
@@ -183,7 +183,7 @@ function dashToCamel(str)
  </HEAD>
 
  <BODY onload="autoGrid_OnLoadCompleted();">
-	<h1>¸¶ÀÌÇÃ·§Æû autoGrid v1</h1>
+	<h1>ë§ˆì´í”Œë«í¼ autoGrid v1</h1>
 	<table class="blueTable">
 		<tbody>
 			<tr>
@@ -195,7 +195,7 @@ function dashToCamel(str)
 					<label for="rdAutoFitN">false</label>
 				</td>
 
-				<td>Ã¼Å©¹Ú½ºÀ¯¹«(false´Â ¼ø¼­)</td>
+				<td>ì²´í¬ë°•ìŠ¤ìœ ë¬´(falseëŠ” ìˆœì„œ)</td>
 				<td>
 					<input type="radio" id="rdCheckBoxY" name="rdCheckBox" checked value="Y">
 					<label for="rdCheckBoxY">true</label>
@@ -203,7 +203,7 @@ function dashToCamel(str)
 					<label for="rdCheckBoxN">false</label>
 				</td>
 
-				<td>SummaryÀ¯¹«</td>
+				<td>Summaryìœ ë¬´</td>
 				<td>
 					<input type="radio" id="rdSummaryY" name="rdSummary" checked value="Y">
 					<label for="rdSummaryY">true</label>
@@ -247,9 +247,9 @@ function dashToCamel(str)
 	<table class="blueTable">
 		<thead>
 			<tr>
-				<th>ÄÃ·³¸í</th>
-				<th>ÄÃ·³</th>
-				<th>±âÅ¸(ÃßÈÄ°³¹ß)</th>
+				<th>ì»¬ëŸ¼ëª…</th>
+				<th>ì»¬ëŸ¼</th>
+				<th>ê¸°íƒ€(ì¶”í›„ê°œë°œ)</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -270,13 +270,13 @@ function dashToCamel(str)
 	</table>
 
 	<div>
-		<p style="float:right;"><button type="button" onClick="btn1_onclick();">»ı¼º</button></p>
+		<p style="float:right;"><button type="button" onClick="btn1_onclick();">ìƒì„±</button></p>
 	</div>
 
 	<table class="blueTable">
 		<thead>
 			<tr>
-				<th>¿Ï¼ºµÈ GRID ¼Ò½º</th>
+				<th>ì™„ì„±ëœ GRID ì†ŒìŠ¤</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -293,7 +293,7 @@ function dashToCamel(str)
 	<table class="blueTable">
 		<thead>
 			<tr>
-				<th>*»ç¿ë¹æ¹ı</th>
+				<th>*ì‚¬ìš©ë°©ë²•</th>
 			</tr>
 		</thead>
 		<tbody>

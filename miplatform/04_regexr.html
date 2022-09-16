@@ -17,7 +17,7 @@ function regexr_OnLoadCompleted()
 
 function keyevent()
 {
-	// ctrl + enter IN Àı ¸¸µé±â
+	// ctrl + enter IN ì ˆ ë§Œë“¤ê¸°
 	if(event.ctrlKey && event.keyCode == 13 ){
 		btn1_onclick();
 	}
@@ -25,7 +25,7 @@ function keyevent()
 
 var root;
 
-/* in Àı ¸¸µé±â */
+/* in ì ˆ ë§Œë“¤ê¸° */
 function btn1_onclick()
 {
 	document.getElementById('txtOraInCrea').value = "";
@@ -53,7 +53,7 @@ function btn1_onclick()
 
 }
 
-/* Query Á¤¸® ÇÏ±â */
+/* Query ì •ë¦¬ í•˜ê¸° */
 function btn2_onclick()
 {
 	document.getElementById('txtQuerySortCrea').value = "";
@@ -68,7 +68,7 @@ function btn2_onclick()
 
 	for (var i=0; i<arrText.length; i++)
 	{
-		// ¸¶Áö¸·±ÛÂ¥°¡ , ÀÌ¸é ÀÚ¸£±â
+		// ë§ˆì§€ë§‰ê¸€ì§œê°€ , ì´ë©´ ìë¥´ê¸°
 		if (arrText[i].charAt(arrText[i].length-1) == "," ){
 			arrText[i] = arrText[i].slice(0, -1);
 		}
@@ -101,14 +101,14 @@ function btn2_onclick()
  </HEAD>
 
  <BODY onload="regexr_OnLoadCompleted();">
-	<h1>Á¤±Ô½Ä_V1</h1>
+	<h1>ì •ê·œì‹_V1</h1>
 
 	<table class="blueTable">
 		<thead>
 			<tr>
-				<th>IN Àı ¸¸µé±â</th>
-				<th>Query Á¤¸®</th>
-				<th>¹Ì»ç¿ë</th>
+				<th>IN ì ˆ ë§Œë“¤ê¸°</th>
+				<th>Query ì •ë¦¬</th>
+				<th>ë¯¸ì‚¬ìš©</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -127,15 +127,15 @@ function btn2_onclick()
 			</tr>
 			<tr style="text-align: center;">
 				<td>
-					<button type="button" onClick="btn1_onclick();">»ı¼º</button>
+					<button type="button" onClick="btn1_onclick();">ìƒì„±</button>
 				</td>
 
 				<td>
-					<button type="button" onClick="btn2_onclick();">»ı¼º</button>
+					<button type="button" onClick="btn2_onclick();">ìƒì„±</button>
 				</td>
 
 				<td>
-					<button type="button" onClick="btn3_onclick();">»ı¼º</button>
+					<button type="button" onClick="btn3_onclick();">ìƒì„±</button>
 				</td>
 			</tr>
 		</tbody>
@@ -164,12 +164,12 @@ function btn2_onclick()
 	<table class="blueTable">
 		<thead>
 			<tr>
-				<th>*»ç¿ë¹ı</th>
+				<th>*ì‚¬ìš©ë²•</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td>1. inÀı ¸¸µé±â¿¡¼­ Ctrl + enter ´Â »ı¼º ¹öÆ° Å¬¸¯</td>
+				<td>1. inì ˆ ë§Œë“¤ê¸°ì—ì„œ Ctrl + enter ëŠ” ìƒì„± ë²„íŠ¼ í´ë¦­</td>
 			</tr>
 			<tr>
 				<td></td>

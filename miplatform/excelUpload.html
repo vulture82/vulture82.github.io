@@ -13,7 +13,7 @@
 <script type="text/javascript">
 function autoGrid_OnLoadCompleted()
 {
-	//document.getElementById('txtColumnNm').value	= "ÇĞ¹ø\n¼º¸í";
+	//document.getElementById('txtColumnNm').value	= "í•™ë²ˆ\nì„±ëª…";
 	document.getElementById('txtColumn').value		= "STD_NO\nKOR_NM";
 	document.getElementById('edMainDs').focus();
 
@@ -27,7 +27,7 @@ function preBtn1_onclick()
 	var strBindDataset = document.getElementById('edMainDs').value.trim();
 
 	if ( strBindDataset.length == 0 ) {
-		alert("[MainDs] ÀÌ¸§À» ÀÛ¼ºÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù...!");
+		alert("[MainDs] ì´ë¦„ì„ ì‘ì„±í•´ ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤...!");
 		document.getElementById('edMainDs').focus();
 		return false;
 	}
@@ -36,7 +36,7 @@ function preBtn1_onclick()
 	var strGridId = document.getElementById('edDummyDs').value.trim();
 
 	if ( strGridId.length == 0 ) {
-		alert("[DummyDs] ÀÌ¸§À» ÀÛ¼ºÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù...!");
+		alert("[DummyDs] ì´ë¦„ì„ ì‘ì„±í•´ ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤...!");
 		document.getElementById('edDummyDs').focus();
 		return false;
 	}
@@ -45,7 +45,7 @@ function preBtn1_onclick()
 	var strWidth = document.getElementById('edDummyExcelDs').value.trim();
 
 	if ( strWidth.length == 0 ) {
-		alert("[DummyExcelDs] ÀÌ¸§À» ÀÛ¼ºÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù...!");
+		alert("[DummyExcelDs] ì´ë¦„ì„ ì‘ì„±í•´ ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤...!");
 		document.getElementById('edDummyExcelDs').focus();
 		return false;
 	}
@@ -60,8 +60,8 @@ function btn1_onclick()
 		return;
 	}
 
-	// dataset id ±îÁö »ç¿ë ÇÒ¶§
-	document.getElementById('txtComplete').value = ""; // ÃÊ±âÈ­
+	// dataset id ê¹Œì§€ ì‚¬ìš© í• ë•Œ
+	document.getElementById('txtComplete').value = ""; // ì´ˆê¸°í™”
 
 	var tmp1 = document.getElementById('txtColumnNm').value.trim();
 	var tmp2 = document.getElementById('txtColumn').value.trim();
@@ -71,7 +71,7 @@ function btn1_onclick()
 
 	if ( tmp1.length > 0 ) {
 		if (arrColumnNm.length != arrColumn.length ) {
-			alert("[ÄÃ·³¸í(ÁÖ¼®)] °ú [ÄÃ·³] °¹¼ö°¡ ´Ù¸¨´Ï´Ù.");
+			alert("[ì»¬ëŸ¼ëª…(ì£¼ì„)] ê³¼ [ì»¬ëŸ¼] ê°¯ìˆ˜ê°€ ë‹¤ë¦…ë‹ˆë‹¤.");
 			document.getElementById('txtColumnNm').focus();
 			return;
 		}
@@ -80,23 +80,23 @@ function btn1_onclick()
 	var test_text1	= "";
 	var strComplete = "";
 
-	// MainDs °ª
+	// MainDs ê°’
 	var strMainDs			= document.getElementById('edMainDs').value.trim();
 
-	// DummyDs ÀÌ¸§
+	// DummyDs ì´ë¦„
 	var strDummyDs			= document.getElementById('edDummyDs').value.trim();
 
-	// DummyExcelDs ÀÌ¸§
+	// DummyExcelDs ì´ë¦„
 	var strDummyExcelDs		= document.getElementById('edDummyExcelDs').value.trim();
 
-	// GRID »ı¼º½ÃÀÛ
+	// GRID ìƒì„±ì‹œì‘
 	var strGridSouCe	 = '';
 
 	var strGrid0		 = "if( fdFileDialog.Open() )\n{\n";
 		strGrid0		+= "\t" + strMainDs + ".ClearData();\n";
 		strGrid0		+= "\t" + strDummyDs + ".ClearData();\n";
 		strGrid0		+= "\t" + strDummyExcelDs + ".ClearData();\n\n";
-		strGrid0		+= '\t' + 'var strFileUrl = fdFileDialog.FilePath + "\\\\" + fdFileDialog.FileName;\n'; // \\ < ÀÌ½ºÄÉÀÌÇÁ ¿ª½½·¯½¬1°³
+		strGrid0		+= '\t' + 'var strFileUrl = fdFileDialog.FilePath + "\\\\" + fdFileDialog.FileName;\n'; // \\ < ì´ìŠ¤ì¼€ì´í”„ ì—­ìŠ¬ëŸ¬ì‰¬1ê°œ
 
 	var strGrid1		 = "\t" + "ext_ExcelImportByIndex(strFileUrl, 0,'" + strDummyExcelDs + "' ,1, 1, 0, 0);" + "\n\n";
 
@@ -107,7 +107,7 @@ function btn1_onclick()
 	var strGrid4		 = "\t\t" + "var nRow = " + strDummyDs + ".AddRow();" + "\n";
 
 	var strGrid5		 = '';
-	// ÄÃ·³ ¸íÄª ¼Ò¹®ÀÚ
+	// ì»¬ëŸ¼ ëª…ì¹­ ì†Œë¬¸ì
 	var strLowColumn	 = '';
 
 	var strColNum		 = '';
@@ -150,9 +150,9 @@ function btn1_onclick()
 
 	document.getElementById('txtComplete').value = strComplete;
 
-	document.getElementById('txtDummyDataSet').value = ""; // ÃÊ±âÈ­
+	document.getElementById('txtDummyDataSet').value = ""; // ì´ˆê¸°í™”
 
-	// GRID »ı¼º½ÃÀÛ
+	// GRID ìƒì„±ì‹œì‘
 	var strDataSetsource	= '';
 	var strComplete2		= "";
 
@@ -160,7 +160,7 @@ function btn1_onclick()
 	var strDataSet2			= '\t' + '<Contents>' + '\n';
 	var strDataSet3			= '';
 
-	// ÄÃ·³
+	// ì»¬ëŸ¼
 	var strLowColumn2	= '';
 
 	for ( var i=0; i<arrColumn.length; i++ ) {
@@ -191,19 +191,19 @@ function dashToCamel(str)
  </HEAD>
 
  <BODY onload="autoGrid_OnLoadCompleted();">
-	<h1>¸¶ÀÌÇÃ·§Æû ¿¢¼¿¾÷·Îµå v1</h1>
+	<h1>ë§ˆì´í”Œë«í¼ ì—‘ì…€ì—…ë¡œë“œ v1</h1>
 	<table class="blueTable">
 		<tbody>
 			<tr>
-				<td>±×¸®µå DataSet</td>
+				<td>ê·¸ë¦¬ë“œ DataSet</td>
 				<td><input type="text" id="edMainDs" name="edMainDs" size="20" value="DS_EXAM120" />
 				</td>
 
-				<td>´õ¹Ì Dataset</td>
+				<td>ë”ë¯¸ Dataset</td>
 				<td><input type="text" id="edDummyDs" name="edDummyDs" size="20" value="DS_DUMMY" />
 				</td>
 
-				<td>´õ¹Ì Dataset2</td>
+				<td>ë”ë¯¸ Dataset2</td>
 				<td><input type="text" id="edDummyExcelDs" name="edDummyExcelDs" size="20" value="DS_DUMMY_EXCEL" />
 				</td>
 			</tr>
@@ -215,9 +215,9 @@ function dashToCamel(str)
 	<table class="blueTable">
 		<thead>
 			<tr>
-				<th>ÄÃ·³¸í(ÁÖ¼®)</th>
-				<th>ÄÃ·³</th>
-				<th>±âÅ¸(ÃßÈÄ°³¹ß)</th>
+				<th>ì»¬ëŸ¼ëª…(ì£¼ì„)</th>
+				<th>ì»¬ëŸ¼</th>
+				<th>ê¸°íƒ€(ì¶”í›„ê°œë°œ)</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -238,14 +238,14 @@ function dashToCamel(str)
 	</table>
 
 	<div>
-		<p style="float:right;"><button type="button" onClick="btn1_onclick();">»ı¼º</button></p>
+		<p style="float:right;"><button type="button" onClick="btn1_onclick();">ìƒì„±</button></p>
 	</div>
 
 	<table class="blueTable">
 		<thead>
 			<tr>
-				<th>¿Ï¼ºµÈ ExcelUpload Script ¼Ò½º</th>
-				<th>´õ¹Ì Dataset »ı¼º</th>
+				<th>ì™„ì„±ëœ ExcelUpload Script ì†ŒìŠ¤</th>
+				<th>ë”ë¯¸ Dataset ìƒì„±</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -265,15 +265,15 @@ function dashToCamel(str)
 	<table class="blueTable">
 		<thead>
 			<tr>
-				<th>*»ç¿ë¹æ¹ı</th>
+				<th>*ì‚¬ìš©ë°©ë²•</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td>1. ÁÖ¼® ¾µ³»¿ëÀÌ ¾øÀ¸¸é ¾Æ¹«°Íµµ ¾È½áµµ µÈ´Ù.</td>
+				<td>1. ì£¼ì„ ì“¸ë‚´ìš©ì´ ì—†ìœ¼ë©´ ì•„ë¬´ê²ƒë„ ì•ˆì¨ë„ ëœë‹¤.</td>
 			</tr>
 			<tr>
-				<td>2. ÁÖ¼®À» »ç¿ëÇÒ·Á¸é ÄÃ·³°ú »çÀÌÁî(°¹¼ö)¸¦ ¸ÂÃç¾ßµÈ´Ù.</td>
+				<td>2. ì£¼ì„ì„ ì‚¬ìš©í• ë ¤ë©´ ì»¬ëŸ¼ê³¼ ì‚¬ì´ì¦ˆ(ê°¯ìˆ˜)ë¥¼ ë§ì¶°ì•¼ëœë‹¤.</td>
 			</tr>
 		</tbody>
 	</table>

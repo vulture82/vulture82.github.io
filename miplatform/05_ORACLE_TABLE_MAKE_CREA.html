@@ -25,7 +25,7 @@ textarea {background:#34495E; color:#fff; padding:20px;}
 function autoGrid_OnLoadCompleted()
 {
 	$('#txtColumnName').val('EXAM_YY\nCOLL_FG\nSELT_FG\nAPLY_FG\nLANG_SEL_TYPE\nMATH_SEL_TYPE\nSRCH_SEL_TYPE\nSRCH_SBJT_NO_1\nSRCH_SBJT_NO_2\nFRN_SEL_TYPE\nREMK\nREG_ID\nREG_DTTM\nREG_IP\nMOD_ID\nMOD_DTTM\nMOD_IP');
-	$('#txtCommets').val('ÀÔ½Ã³âµµ\n¸ğÁı±¸ºĞ\nÀüÇü±¸ºĞ\nÀÀ½Ã±¸ºĞ\n±¹¾î¿µ¿ª ¼±ÅÃ°ú¸ñ\n¼öÇĞ¿µ¿ª ¼±ÅÃ°ú¸ñ\nÅ½±¸¿µ¿ª ±¸ºĞ\nÅ½±¸¿µ¿ª Á¦1¼±ÅÃ°ú¸ñ\nÅ½±¸¿µ¿ª Á¦2¼±ÅÃ°ú¸ñ\nÁ¦2¿Ü±¹¾î/ÇÑ¹® ¼±ÅÃ°ú¸ñ\nºñ°í\nµî·ÏÀÚID\nµî·ÏÀÏ½Ã\nµî·ÏÀÚIP\n¼öÁ¤ÀÚID\n¼öÁ¤ÀÏ½Ã\n¼öÁ¤ÀÚIP');
+	$('#txtCommets').val('ì…ì‹œë…„ë„\nëª¨ì§‘êµ¬ë¶„\nì „í˜•êµ¬ë¶„\nì‘ì‹œêµ¬ë¶„\nêµ­ì–´ì˜ì—­ ì„ íƒê³¼ëª©\nìˆ˜í•™ì˜ì—­ ì„ íƒê³¼ëª©\níƒêµ¬ì˜ì—­ êµ¬ë¶„\níƒêµ¬ì˜ì—­ ì œ1ì„ íƒê³¼ëª©\níƒêµ¬ì˜ì—­ ì œ2ì„ íƒê³¼ëª©\nì œ2ì™¸êµ­ì–´/í•œë¬¸ ì„ íƒê³¼ëª©\në¹„ê³ \në“±ë¡ìID\në“±ë¡ì¼ì‹œ\në“±ë¡ìIP\nìˆ˜ì •ìID\nìˆ˜ì •ì¼ì‹œ\nìˆ˜ì •ìIP');
 	$('#txtDataType').val('VARCHAR2 (4 Byte)\nVARCHAR2 (10 Byte)\nVARCHAR2 (10 Byte)\nVARCHAR2 (8 Byte)\nVARCHAR2 (8 Byte)\nVARCHAR2 (8 Byte)\nVARCHAR2 (8 Byte)\nVARCHAR2 (10 Byte)\nVARCHAR2 (10 Byte)\nVARCHAR2 (8 Byte)\nVARCHAR2 (400 Byte)\nVARCHAR2 (20 Byte)\nDATE\nVARCHAR2 (20 Byte)\nVARCHAR2 (20 Byte)\nDATE\nVARCHAR2 (20 Byte)');
 	$('#txtPk').val('1\n1\n1\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0');
 	$('#txtNotNull').val('1\n1\n1\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0');
@@ -37,7 +37,7 @@ function preBtn1_onclick()
 	var strBindDataset = $.trim($('#edMainDs').val());
 
 	if ( strBindDataset.length == 0 ) {
-		alert("[MainDs] ÀÌ¸§À» ÀÛ¼ºÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù...!");
+		alert("[MainDs] ì´ë¦„ì„ ì‘ì„±í•´ ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤...!");
 		document.getElementById('edMainDs').focus();
 		return false;
 	}
@@ -51,7 +51,7 @@ function btn1_onclick()
 		return;
 	}
 
-	$('#txtComplete').val(""); // ÃÊ±âÈ­
+	$('#txtComplete').val(""); // ì´ˆê¸°í™”
 
 	var tmp1 = $.trim($('#txtColumnName').val());
 	var tmp2 = $.trim($('#txtCommets').val());
@@ -67,13 +67,13 @@ function btn1_onclick()
 
 	if ( tmp1.length > 0 ) {
 		if (arrColumnName.length != arrComments.length ) {
-			alert("Column Name °ú Comments °¹¼ö°¡ ´Ù¸¨´Ï´Ù.");
+			alert("Column Name ê³¼ Comments ê°¯ìˆ˜ê°€ ë‹¤ë¦…ë‹ˆë‹¤.");
 			$("#arrColumnName").focus();
 			return;
 		}
 
 		if (arrComments.length != arrDataType.length ) {
-			alert("Comments ¿Í Data Type ÀÇ °¹¼ö°¡ ´Ù¸¨´Ï´Ù.");
+			alert("Comments ì™€ Data Type ì˜ ê°¯ìˆ˜ê°€ ë‹¤ë¦…ë‹ˆë‹¤.");
 			$("#txtCommets").focus();
 			return;
 		}
@@ -90,8 +90,8 @@ function btn1_onclick()
 	var strGrid1 = "";
 	var strGrid2 = "";
 	var strGrid3 = "COMMENT ON TABLE " + strMainDs + " IS '" + strMainComment + "';"; // Comments
-	var strGrid4 = ""; // PK ¼³Á¤
-	var cnt = 0; // PK Ã¼Å©
+	var strGrid4 = ""; // PK ì„¤ì •
+	var cnt = 0; // PK ì²´í¬
 	var strPk = "";
 
 	strGrid0 = "ALTER TABLE " + strMainDs + " DROP PRIMARY KEY CASCADE;\n\n";
@@ -111,7 +111,7 @@ function btn1_onclick()
 		strGrid1 += "\n\t" + arrColumnName[i] + "\t" + arrDataType[i].replace(" (", "(") + "\t" + arrNotNull[i] + ",";
 		strGrid3 += "\nCOMMENT ON COLUMN " + strMainDs + "." + arrColumnName[i] + " IS '" + arrComments[i] + "';";
 		
-		// PK ¼³Á¤
+		// PK ì„¤ì •
 		if ( arrPk[i] == "1") {
 			strPk += arrColumnName[i] + ",";
 			cnt++;
@@ -179,7 +179,7 @@ ALTER TABLE ` + strMainDs + ` ADD (
  </HEAD>
 
  <BODY onload="autoGrid_OnLoadCompleted()">
-	<h1>¸¶ÀÌÇÃ·§Æû ¿¢¼¿¾÷·Îµå v1</h1>
+	<h1>ë§ˆì´í”Œë«í¼ ì—‘ì…€ì—…ë¡œë“œ v1</h1>
 	<table class="blueTable">
 		<tbody>
 			<tr>
@@ -197,7 +197,7 @@ ALTER TABLE ` + strMainDs + ` ADD (
 				<td>ORACLE TABLE NAME</td>
 				<td><input type="text" id="edMainDs" name="edTableName" size="20" value="EXAM120" /></td>
 				<td>ORACLE TABLE Comment</td>
-				<td><input type="text" id="edDsComment" name="edTableName" size="20" value="¸ğÁı±¸ºĞº° ÀüÇü°ü¸®" /></td>
+				<td><input type="text" id="edDsComment" name="edTableName" size="20" value="ëª¨ì§‘êµ¬ë¶„ë³„ ì „í˜•ê´€ë¦¬" /></td>
 			</tr>
 		</tbody>
 	</table>
@@ -226,7 +226,7 @@ ALTER TABLE ` + strMainDs + ` ADD (
 	</table>
 
 	<div>
-		<p style="float:right;"><button type="button" onClick="btn1_onclick();">»ı¼º</button></p>
+		<p style="float:right;"><button type="button" onClick="btn1_onclick();">ìƒì„±</button></p>
 	</div>
 
 	<table class="blueTable">
@@ -247,15 +247,15 @@ ALTER TABLE ` + strMainDs + ` ADD (
 	<table class="blueTable">
 		<thead>
 			<tr>
-				<th>*»ç¿ë¹æ¹ı</th>
+				<th>*ì‚¬ìš©ë°©ë²•</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td>1. ÁÖ¼® ¾µ³»¿ëÀÌ ¾øÀ¸¸é ¾Æ¹«°Íµµ ¾È½áµµ µÈ´Ù.</td>
+				<td>1. ì£¼ì„ ì“¸ë‚´ìš©ì´ ì—†ìœ¼ë©´ ì•„ë¬´ê²ƒë„ ì•ˆì¨ë„ ëœë‹¤.</td>
 			</tr>
 			<tr>
-				<td>2. ÁÖ¼®À» »ç¿ëÇÒ·Á¸é ÄÃ·³°ú »çÀÌÁî(°¹¼ö)¸¦ ¸ÂÃç¾ßµÈ´Ù.</td>
+				<td>2. ì£¼ì„ì„ ì‚¬ìš©í• ë ¤ë©´ ì»¬ëŸ¼ê³¼ ì‚¬ì´ì¦ˆ(ê°¯ìˆ˜)ë¥¼ ë§ì¶°ì•¼ëœë‹¤.</td>
 			</tr>
 		</tbody>
 	</table>

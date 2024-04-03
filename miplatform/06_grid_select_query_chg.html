@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-Transitional.dtd" >
+<HTML>
+ <HEAD>
+  <TITLE> svc_conversion </TITLE>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
+	<META NAME="Generator" CONTENT="EditPlus">
+	<META NAME="Author" CONTENT="">
+	<META NAME="Keywords" CONTENT="">
+	<META NAME="Description" CONTENT="">
+
+<link rel="stylesheet" type="text/css" href="../css/ayjCss.css">
+<script type="text/javascript">
+// ------------------------------------------------------------------
+// 1. 2018.09.28 checkbox 유무 false 시 순번으로 적용
+// ------------------------------------------------------------------
+function autoGrid_OnLoadCompleted()
+{
+
+}
+
+var root;
+
+function btn1_onclick()
+{
+
+	// dataset id 까지 사용 할때
+	document.getElementById('txtComplete').value = ""; // 초기화
+
+	var tmp1 = document.getElementById('txtEct').value.trim();
+
+	var arrGridDetail 	= tmp1.split('\n');
+
+	// 컬럼명 관련
+	var cntColNm	= 0;
+	var strColNm	= "";
+	var strColNm1	= "";
+	var strColNm2	= "";
+	var arrColNm	= "";
+
+	// 컬럼 관련
+	var cntCol		= 0;
+	var strCol		= "";
+	var strCol1		= "";
+	var strCol2		= "";
+	var arrCol		= "";
+ 
+	// 완성된 내용
+	var strEct		= "";
+
+	// 전체 문장에서 필요한 문구를 찾아서 firstReplace.push 한다.
+	for ( var i=0; i<arrGridDetail.length; i++ )
+	{
+		// 컬럼명 추출
+		if ( arrGridDetail[i].indexOf(' text="') > -1 ) {
+			strColNm1 = arrGridDetail[i].substring(arrGridDetail[i].indexOf(' text="')+7,arrGridDetail[i].length);
+			strColNm2 += strColNm1.substring(0, strColNm1.indexOf('"')) + "\n";
+			cntColNm++;
+		}
+
+		// 컬럼 추출
+		if ( arrGridDetail[i].indexOf('colid="') > -1 ) {
+			strCol1 = arrGridDetail[i].substring(arrGridDetail[i].indexOf('colid="')+7,arrGridDetail[i].length);
+			strCol2 = camelToDash(strCol1.substring(0, strCol1.indexOf('"')));
+			if ( strCol2 == "CHK" ) {
+				continue;
+			}
+
+			strCol += strCol2 + "\n";
+			cntCol++;
+		}
+	}
+
+	strColNm = strColNm2.replaceAll("&#32;", " ");
+
+	// 마지막 빈줄 제거
+	strCol = strCol.trim();
+	strColNm = strColNm.trim();
+
+	document.getElementById('txtColumn').value = strCol;
+	document.getElementById('txtColumnNm').value = strColNm;
+
+	if ( cntColNm != cntCol ) {
+		alert("컬럼과 컬럼명 수가 달라 완성된 SELECT 문을 완성할 수 없습니다. 수동으로 사용하시기 바랍니다.");
+		return;
+	}
+
+	arrColNm	= strColNm.split('\n');
+	arrCol		= strCol.split('\n');
+	strEct		= "SELECT ";
+
+	for ( var i=0; i<arrColNm.length; i++ )
+	{
+		// 0번줄은 콤마 때문에 따로 만든다.
+		if ( i == 0 ) {
+			strEct += arrCol[i] + ' AS "' + arrColNm[i] + '"\n';
+		} else {
+			strEct += '     , ' + arrCol[i] + ' AS "' + arrColNm[i] + '"\n';
+		}
+
+	}
+
+	strEct += "  FROM (";
+
+	document.getElementById('txtComplete').value = strEct;
+
+}
+
+/*
+function dashToCamel(str)
+{
+	return str.replace(/_+(.)/gi, function (x, chr) {
+		return chr.toUpperCase();
+		}
+	)
+}
+*/
+
+function camelToDash(str){
+	return str.replace(/([A-Z])/g, function(arg){
+		return "_"+arg.toLowerCase();
+	}).toUpperCase();
+}
+
+</script>
+ </HEAD>
+
+ <BODY onload="autoGrid_OnLoadCompleted();">
+	<h1>마이플랫폼 GRID SELECT QUERY CHANGE</h1>
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>컬럼명</th>
+				<th>컬럼</th>
+				<th>그리드소스</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<textarea id="txtColumnNm" wrap="off" style="width:98%; height:200px;"></textarea>
+				</td>
+
+				<td>
+					<textarea id="txtColumn" wrap="off" style="width:98%; height:200px;"></textarea>
+				</td>
+
+				<td>
+					<textarea id="txtEct" wrap="off" style="width:98%; height:200px;"></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div>
+		<p style="float:right;"><button type="button" onClick="btn1_onclick();">생성</button></p>
+	</div>
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>완성된 SELECT COLUMN 쿼리</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<textarea id="txtComplete" wrap="off" style="width:99%; height:200px;"></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br />
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>*사용방법</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+ </BODY>
+</HTML>

@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-Transitional.dtd" >
+<HTML>
+ <HEAD>
+  <TITLE> svc_conversion </TITLE>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
+	<META NAME="Generator" CONTENT="EditPlus">
+	<META NAME="Author" CONTENT="">
+	<META NAME="Keywords" CONTENT="">
+	<META NAME="Description" CONTENT="">
+
+<link rel="stylesheet" type="text/css" href="../css/ayjCss.css">
+<script type="text/javascript">
+// ------------------------------------------------------------------
+// 1. 2018.09.28 checkbox 유무 false 시 순번으로 적용
+// ------------------------------------------------------------------
+function autoGrid_OnLoadCompleted()
+{
+	document.getElementById('txtColumnNm').value	= "학번\n성명";
+	document.getElementById('txtColumn').value		= "STD_NO\nKOR_NM";
+	document.getElementById('edLeft').focus();
+
+}
+
+var root;
+function preBtn1_onclick()
+{
+	// BindDataset Check
+	var strBindDataset = document.getElementById('edBindDataset').value.trim();
+
+	if ( strBindDataset.length == 0 ) {
+		alert("[BindDataset] 이름을 작성해 주시기 바랍니다...!");
+		document.getElementById('edBindDataset').focus();
+		return false;
+	}
+
+	// GridId Check
+	var strGridId = document.getElementById('edGridId').value.trim();
+
+	if ( strGridId.length == 0 ) {
+		alert("[GridId] 이름을 작성해 주시기 바랍니다...!");
+		document.getElementById('edGridId').focus();
+		return false;
+	}
+
+	// Width Check
+	var strWidth = document.getElementById('edWidth').value.trim();
+
+	if ( strWidth.length == 0 ) {
+		alert("[Width] 넓이를 작성해 주시기 바랍니다...!");
+		document.getElementById('edWidth').focus();
+		return false;
+	}
+
+	// Heigth Check
+	var strHeight = document.getElementById('edHeight').value.trim();
+
+	if ( strHeight.length == 0 ) {
+		alert("[Heigth] 높이를 작성해 주시기 바랍니다...!");
+		document.getElementById('edHeight').focus();
+		return false;
+	}
+
+	return true;
+}
+
+function btn1_onclick()
+{
+
+	if ( !preBtn1_onclick() ){
+		return;
+	}
+
+	// dataset id 까지 사용 할때
+	document.getElementById('txtComplete').value = ""; // 초기화
+
+	var tmp1 = document.getElementById('txtColumnNm').value.trim();
+	var tmp2 = document.getElementById('txtColumn').value.trim();
+
+	var arrColumnNm 	= tmp1.split('\n');
+	var arrColumn 		= tmp2.split('\n');
+
+	if (arrColumnNm.length != arrColumn.length ) {
+		alert("[컬럼명] 과 [컬럼] 개수가 다릅니다.");
+		document.getElementById('txtColumnNm').focus();
+		return;
+	}
+
+	var test_text1	= "";
+	var strComplete = "";
+
+	// AutoFit 유무
+	var chkAutoFit	= document.querySelector('input[name="rdAutoFit"]:checked').value;
+	var strAutoFit	= (chkAutoFit == "Y") ? "TRUE" : "false";
+
+	// 체크박스 유무
+	var chkCheckBox = document.querySelector('input[name="rdCheckBox"]:checked').value;
+
+	// Summary 유무
+	var chkSummary	= document.querySelector('input[name="rdSummary"]:checked').value;
+
+	// Left 값
+	var strLeft			= document.getElementById('edLeft').value.trim();
+
+	// Top 값
+	var strTop			= document.getElementById('edTop').value.trim();
+
+	// Width 값
+	var strWidth		= document.getElementById('edWidth').value.trim();
+
+	// Height 값
+	var strHeight		= document.getElementById('edHeight').value.trim();
+
+	// BindDataset 이름
+	var strBindDataset	= document.getElementById('edBindDataset').value.trim();
+
+	// GridId 이름
+	var strGridId		= document.getElementById('edGridId').value.trim();
+
+
+	// GRID 생성시작
+	var strGridSouCe	 = '';
+	var strGrid1		 = '\t\t<Grid AutoEnter="TRUE" BkColor2="default" BkSelColor="user8" BoldHead="true" Border="Flat" BorderColor="silver" Bottom="468" Color="user15" ColSizing="TRUE" Editable="TRUE" Enable="true" EndLineColor="default" HeadHeight="24" InputPanel="FALSE" LineColor="silver" MinWidth="100" OnHeadClick="gdMain_OnHeadClick" Right="990" RowHeight="24" SelColor="user15" TabOrder="3" TabStop="true" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="silver" WheelScrollRow="1" ';
+		strGrid1		+= 'AutoFit="' + strAutoFit + '" Left="' + strLeft + '" Top="' + strTop + '" Width="' + strWidth + '" Height="' + strHeight + '" BindDataset="' + strBindDataset + '" Id="' + strGridId + '" >\n';
+
+	var strGrid2		 = '\t\t\t<contents>\n';
+		strGrid2		+= '\t\t\t\t<format id="Default">\n';
+		strGrid2		+= '\t\t\t\t\t<columns>\n';
+
+	var strGrid3		 = ( chkCheckBox == 'Y'  ) ? '\t\t\t\t\t\t<col width="25"/>\n' : '\t\t\t\t\t\t<col width="40"/>\n';
+	var strGrid4		 = ( chkCheckBox == 'Y'  ) ? '\t\t\t\t\t\t<cell bkcolor="user4" col="0" color="user1" display="checkbox" font="굴림체,9"/>\n' : '\t\t\t\t\t\t<cell bkcolor="user4" col="0" color="user1" display="text" font="굴림,9" text="순번"/>\n';
+
+	// 컬럼명
+	for ( var i=0; i<arrColumnNm.length; i++ ) {
+		strGrid3		+= '\t\t\t\t\t\t<col width="' + arrColumnNm[i].length * 20 + '"/>\n'; // 컬럼명*20 width
+		strGrid4		+= '\t\t\t\t\t\t<cell bkcolor="user4" col="' + ( chkCheckBox == 'Y' ? i + 1 : i + 1 ) + '" color="user1" display="text" font="굴림체,9" text="' + arrColumnNm[i] + '"/>\n';
+	}
+
+		strGrid3		+= '\t\t\t\t\t</columns>\n\t\t\t\t\t<head>\n';
+		strGrid4		+= '\t\t\t\t\t</head>\n\t\t\t\t\t<body>\n';
+
+	var strGrid5		 = ( chkCheckBox == 'Y'  ) ? '\t\t\t\t\t\t<cell align="center" bkcolor="user3" bkcolor2="user9" col="0" colid="chk" color="user15" display="checkbox" edit="checkbox"/>\n' : '\t\t\t\t\t\t<cell align="left" bkcolor="user3" bkcolor2="user9" col="0" color="user15" display="text" expandcolor="user15" font="굴림체,9" expr="row+1"/>\n';
+
+
+	// 컬럼
+	var strLowColumn	= '';
+
+	for ( var i=0; i<arrColumn.length; i++ ) {
+		strLowColumn	= arrColumn[i].toLowerCase();
+		strGrid5		+= '\t\t\t\t\t\t<cell align="center" bkcolor="user3" bkcolor2="user9" col="' + ( chkCheckBox == 'Y' ? i+1 : i+1 ) + '" colid="' + dashToCamel(strLowColumn) + '" color="user15" display="text" font="굴림체,9"/>\n';
+	}
+
+		strGrid5		+= '\t\t\t\t\t</body>\n';
+
+	var strGrid6		= '';
+
+	if ( chkSummary == 'Y' ) {
+		strGrid6		+= '\t\t\t\t\t<summary>\n';
+		strGrid6		+= '\t\t\t\t\t\t<cell align="left" bkcolor="user25" col="0" color="user19" colspan="' + ( chkCheckBox == 'Y' ? arrColumn.length+1 : arrColumn.length+1 ) + '" display="text" expr="&apos;[건수:&apos;&#32;+&#32;rowcount()+&apos;]&apos;" Valign="Center"/>\n';
+		strGrid6		+= '\t\t\t\t\t</summary>\n';
+	}
+
+	var strGridEnd		= '\t\t\t\t</format>\n\t\t\t</contents>\n\t\t</Grid>';
+
+	strGridSouCe = strGrid1 + strGrid2 + strGrid3 + strGrid4 + strGrid5 + strGrid6
+	+ strGridEnd;
+
+	strComplete = strGridSouCe;
+
+	document.getElementById('txtComplete').value = strComplete;
+
+}
+
+function dashToCamel(str)
+{
+	return str.replace(/_+(.)/gi, function (x, chr) {
+		return chr.toUpperCase();
+		}
+	)
+}
+
+</script>
+ </HEAD>
+
+ <BODY onload="autoGrid_OnLoadCompleted();">
+	<h1>마이플랫폼 autoGrid v1</h1>
+	<table class="blueTable">
+		<tbody>
+			<tr>
+				<td>AutoFit</td>
+				<td>
+					<input type="radio" id="rdAutoFitY" name="rdAutoFit" checked value="Y">
+					<label for="rdAutoFitY">true</label>
+					<input type="radio" id="rdAutoFitN" name="rdAutoFit" value="N">
+					<label for="rdAutoFitN">false</label>
+				</td>
+
+				<td>체크박스유무(false는 순서)</td>
+				<td>
+					<input type="radio" id="rdCheckBoxY" name="rdCheckBox" checked value="Y">
+					<label for="rdCheckBoxY">true</label>
+					<input type="radio" id="rdCheckBoxN" name="rdCheckBox" value="N">
+					<label for="rdCheckBoxN">false</label>
+				</td>
+
+				<td>Summary유무</td>
+				<td>
+					<input type="radio" id="rdSummaryY" name="rdSummary" checked value="Y">
+					<label for="rdSummaryY">true</label>
+					<input type="radio" id="rdSummaryN" name="rdSummary" value="N">
+					<label for="rdSummaryN">false</label>
+				</td>
+			</tr>
+
+			<tr>
+				<td>Left</td>
+				<td><input type="text" id="edLeft" name="edLeft" size="12" value="0" />
+				</td>
+
+				<td>Top</td>
+				<td><input type="text" id="edTop" name="edTop" size="12" value="58" />
+				</td>
+
+				<td>Width</td>
+				<td><input type="text" id="edWidth" name="edWidth" size="12" value="990" />
+				</td>
+			</tr>
+
+			<tr>
+				<td>Height</td>
+				<td><input type="text" id="edHeight" name="edHeight" size="12" value="400" />
+				</td>
+
+				<td>BindDataset</td>
+				<td><input type="text" id="edBindDataset" name="edBindDataset" size="12" value="DS_SAMPLE" />
+				</td>
+
+				<td>GridId</td>
+				<td><input type="text" id="edGridId" name="edGridId" size="12" value="gdMain" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br />
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>컬럼명</th>
+				<th>컬럼</th>
+				<th>기타(추후개발)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<textarea id="txtColumnNm" wrap="off" style="width:98%; height:200px;"></textarea>
+				</td>
+
+				<td>
+					<textarea id="txtColumn" wrap="off" style="width:98%; height:200px;"></textarea>
+				</td>
+
+				<td>
+					<textarea id="txtEct" wrap="off" style="width:98%; height:200px;"></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div>
+		<p style="float:right;"><button type="button" onClick="btn1_onclick();">생성</button></p>
+	</div>
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>완성된 GRID 소스</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<textarea id="txtComplete" wrap="off" style="width:99%; height:200px;"></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br />
+
+	<table class="blueTable">
+		<thead>
+			<tr>
+				<th>*사용방법</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+ </BODY>
+</HTML>
